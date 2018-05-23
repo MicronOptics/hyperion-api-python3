@@ -1,13 +1,20 @@
 import asyncio
 from struct import pack, unpack
-
-
+from collections import namedtuple
+import numpy as np
 
 
 COMMAND_PORT = 51971
 STREAM_PEAKS_PORT = 51972
 STREAM_SPECTRA_PORT = 51973
 STREAM_SENSORS_PORT = 51974
+
+SUCCESS = 0
+
+HyperionResponse = namedtuple('HyperionResponse', 'message content')
+HyperionResponse.__doc__ += "A namedtuple object that encapsulates responses returned from a Hyperion Instrument"
+HyperionResponse.message.__doc__ = "A human readable string returned for most commands."
+HyperionResponse.content.__doc__ = "The binary data returned from the instrument, as a bytearray"
 
 class HCommTCPClient(object):
     """A class that implements they hyperion communication protocol over TCP, using asynchronous IO
@@ -20,7 +27,7 @@ class HCommTCPClient(object):
     RECV_BUFFER_SIZE = 4096
 
 
-    def __init__(self, address : str, port = COMMAND_PORT, loop):
+    def __init__(self, address : str, port, loop):
         """Sets up a new HCommTCPClient for connection to a Hyperion instrument.
 
         :param str address: IPV4 Address of the hyperion instrument
@@ -36,8 +43,10 @@ class HCommTCPClient(object):
         self.read_buffer = bytearray()
 
     async def connect(self):
-
-
+        """
+        Open an asyncio connection to the instrument.
+        :return:
+        """
         self.reader, self.writer = await asyncio.open_connection(self.address, self.port, loop = self.loop)
 
 
@@ -58,17 +67,24 @@ class HCommTCPClient(object):
     async def read_response(self):
         """Asynchronously reads a hyperion formatted response from the instrument
 
-        :return: The response in the form of a dictionary with keys "message" and "content".
-        :rtype: dict
+        :return: The response as a HyperionResponse Object.
+        :rtype: HyperionResponse
         """
         read_header = await self.read_data(self.READ_HEADER_LENGTH)
         (status, response_type, message_length, content_length) = unpack('BBHI', read_header)
 
-        message = await self.read_data(message_length)
+        if message_length > 0:
+            message = await self.read_data(message_length)
+        else:
+            message = ''
+        if status != SUCCESS:
+            self.read_buffer = bytearray()
+            raise (HyperionError(message))
+
 
         content = await self.read_data(content_length)
 
-        return dict(message=message.decode(encoding='ascii'), content=content)
+        return HyperionResponse(message=message.decode(encoding='ascii'), content=content)
 
 
     def write_command(self, command, argument = '', request_options = 0):
@@ -89,8 +105,8 @@ class HCommTCPClient(object):
         :param str command: The command to be sent.  Must start with "#".
         :param str argument: The argument string.  More than one arguments are included in a single space-delimited string.
         :param request_options: byte flags that determine the type of data returned by the instrument.
-        :return: The response in the form of a dictionary with keys "message" and "content".
-        :rtype: dict
+        :return: The response as a HyperionResponse Object
+        :rtype: HyperionResponse
         """
         if self.writer is None:
             await self.connect()
@@ -103,6 +119,8 @@ class HCommTCPClient(object):
         return response
 
 
+
+
     @classmethod
     def hyperion_command(cls, address, command, argument='', request_options=0):
         """A self contained synchronous wrapper for sending single commands to the hyperion and receiving a response.
@@ -111,8 +129,8 @@ class HCommTCPClient(object):
         :param command: The command to be sent.  Must start with "#".
         :param argument: The argument string.  If more than one, arguments are included in a single space-delimited string.
         :param request_options: Byte flags that determine the type of data returned by the instrument.
-        :return: The response in the form of a dictionary with keys "message" and "content".
-        :rtype: dict
+        :return: The response as a HyperionResponse Object
+        :rtype: HyerionResponse
         """
         loop = asyncio.get_event_loop()
 
@@ -136,34 +154,69 @@ class HCommTCPSensorStreamer(HCommTCPClient):
         :param loop:  The event loop that will be used for scheduling tasks.
         :param asyncio.Queue queue: A queue that can be used for transferring streamed data within the main thread.
         """
-        super().__init__(address, port=STREAM_SENSORS_PORT, loop)
+        super().__init__(address, port=STREAM_SENSORS_PORT, loop=loop)
 
         self.content_length = 0
         self.data_queue = queue
+        self.stream_active = False
 
     async def stream_data(self):
+        """
+        Streams sensor data to the data queue.  This streamlines the data retrieval, and assumes that the number of
+        sensors is going to be constant.
+        :return: None
+        """
 
-        if self.content_length == 0:
-            read_header = await self.read_data(self.READ_HEADER_LENGTH)
-            (status, response_type, message_length, self.content_length) = unpack('BBHI', read_header)
+        await self.connect()
+        self.stream_active = True
 
-            content = await self.read_data(self.content_length)
-            data = HACQSensorData(content)
+        while self.stream_active:
 
-            self.timestamp_init = data.header.timestampFrac * 1e-9 + data.header.timestampInt
+            try:
+                if self.content_length == 0:
+                    read_header = await self.read_data(self.READ_HEADER_LENGTH)
+                    (status, response_type, message_length, self.content_length) = unpack('BBHI', read_header)
 
-        else:
-            content = await self.read_data(self.READ_HEADER_LENGTH + self.content_length)
-            data = HACQSensorData(content[self.READ_HEADER_LENGTH:])
+                    content = await self.read_data(self.content_length)
+                    data = HACQSensorData(content)
+
+                else:
+                    content = await self.read_data(self.READ_HEADER_LENGTH + self.content_length)
+                    data = HACQSensorData(content[self.READ_HEADER_LENGTH:])
+            except:
+                self.stream_active = False
+                return
+
 
             timestamp = data.header.timestampFrac * 1e-9 + data.header.timestampInt
 
-        await self.data_queue.put({'timestamp': timestamp, 'data': data.data})
+            await self.data_queue.put({'timestamp': timestamp, 'data': data.data})
+
+    def stop_streaming(self):
+
+        self.stream_active = False
 
 
+class HACQSensorData:
+    """Class that encapsulates sensor data streamed from hyperion
+
+    """
+    sensor_header = namedtuple('sensor_header',
+                               'headerLength status bufferPercentage reserved serialNumber timestampInt timestampFrac')
+
+    def __init__(self, streamingData):
+        self.header = HACQSensorData.sensor_header._make(unpack('HBBIQII', streamingData[:24]))
+
+        self.data = np.frombuffer(streamingData[self.header.headerLength:], dtype=np.float)
 
 
+class HyperionError(Exception):
+    """Exception class for encapsulating error information from Hyperion.
+    """
 
+    # changed to reflect to error codes
+    def __init__(self, message):
+        self.string = message
 
-
-
+    def __str__(self):
+        return repr(self.string)
