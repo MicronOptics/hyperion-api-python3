@@ -1,9 +1,10 @@
 import asyncio
 import socket
-from struct import pack, unpack
+from struct import pack, unpack, calcsize
 from collections import namedtuple
 import numpy as np
 from datetime import datetime
+from functools import partial
 
 
 COMMAND_PORT = 51971
@@ -263,8 +264,67 @@ class Hyperion(object):
 
         return datetime(*unpack('HHHHH', date_data))
 
-    @instrument_utc_date_time
+    @instrument_utc_date_time.setter
+    def instrument_utc_date_time(self, date_time: datetime):
 
+        self._execute_command('#SetInstrumentUtcDateTime', datetime.strftime('Y m d H M S'))
+
+
+    @property
+    def ntp_enabled(self):
+        """
+        Boolean value indicating the enabled state of the Network Time Protocol for automatic time synchronization.
+        (settable)
+
+        :type: bool
+        """
+
+        return unpack('I', self._execute_command('#GetNtpEnabled').content)[0] > 0
+
+    @ntp_enabled.setter
+    def ntp_enabled(self, enabled: bool):
+
+        if enabled:
+            argument = '1'
+        else:
+            argument = '0'
+
+        self._execute_command('#SetNtpEnabled', argument)
+
+
+    @property
+    def ntp_server(self):
+        """
+        String containing the IP address of the NTP server. (settable)
+        :type: str
+        """
+
+        return str(self._execute_command('#GetNtpServer').content)
+
+
+    @ntp_server.setter
+    def ntp_server(self, server_address):
+
+        self._execute_command('#SetNtpServer', server_address)
+
+    @property
+    def ptp_enabled(self):
+        """
+        Boolean value indicating the enabled state of the precision time protocol.  Note that this cannot be enabled
+        at the same time as NTP.  (settable)
+        :type:
+        """
+        return unpack('I', self._execute_command('#GetPtpEnabled').content)[0] > 0
+
+    @ptp_enabled.setter
+    def ptp_enabled(self, enabled: bool):
+
+        if enabled:
+            argument = '1'
+        else:
+            argument = '0'
+
+        self._execute_command('#SetPtpEnabled', argument)
 
 
 
@@ -375,26 +435,114 @@ class HCommTCPClient(object):
 
     @classmethod
     def hyperion_command(cls, address, command, argument='', request_options=0):
-        """A self contained synchronous wrapper for sending single commands to the hyperion and receiving a response.
+        """
+        A self contained synchronous wrapper for sending single commands to the hyperion and receiving a response.
 
         :param address: The instrument ipV4 address.
+        :type address: str
         :param command: The command to be sent.  Must start with "#".
+        :type command: str
         :param argument: The argument string.  If more than one, arguments are included in a single space-delimited string.
+        :type argument: str
         :param request_options: Byte flags that determine the type of data returned by the instrument.
+        :type request_options: int
         :return: The response as a HyperionResponse namedTuple
         :rtype: HyperionResponse
         """
-        loop = asyncio.get_event_loop()
+        exec_loop = asyncio.get_event_loop()
 
-        h1 = HCommTCPClient(address, COMMAND_PORT, loop)
+        h1 = HCommTCPClient(address, COMMAND_PORT, exec_loop)
 
-        loop.run_until_complete(h1.execute_command(command, argument, request_options))
+        exec_loop.run_until_complete(h1.execute_command(command, argument, request_options))
+
         h1.writer.close()
 
         return h1.last_response
 
+class HCommTCPStreamer(HCommTCPClient):
+    """
+    Abstract base class for the different streaming data sources on the Hyperion (peaks, spectra, sensors)
+    """
 
-class HCommTCPSensorStreamer(HCommTCPClient):
+    def __init__(self, address:str, port: int, loop, queue : asyncio.Queue, data_parser = None, fast_streaming = False):
+        """
+        Set up a new streaming client.
+        :param address: The instrument ipV4 address
+        :type address: str
+        :param port: TCP port that is used for streaming.
+        :type port: int
+        :param loop: The event loop that will be used for scheduling tasks.
+        :type loop: asyncio.loop
+        :param queue: asyncio.Queue queue: A queue that can be used for transferring streamed data within the thead.
+        :type queue: asyncio.Queue
+        :param data_parser:  Callable that takes in the binary content from the stream and returns a data dict that can
+        be consumed.
+        """
+
+        super().__init__(address, port=port, loop=loop)
+
+        self.data_queue = queue
+        self.stream_active = False
+        self._data_parser = data_parser or (lambda data_in: {'data': data_in})
+        self._last_content_length = None
+        self._fast_streaming = fast_streaming
+
+
+    async def get_data(self, content_length = None):
+        """
+        Asynchronously retrieve streaming data, and output the parsed data dictionary.
+
+        :param content_length: If not none, then this will avoid the added call to retrieve the read header, and will
+        retrieve both the header and the content in a single call.
+        :type content_length: int
+        :return: parse data
+        :rtype: dict
+        """
+
+        if content_length:
+
+            content = await self.read_data(self.READ_HEADER_LENGTH + content_length)
+            content = content[self.READ_HEADER_LENGTH:]
+
+        else:
+
+            read_header = await self.read_data(self.READ_HEADER_LENGTH)
+            (status, response_type, message_length, content_length) = unpack('BBHI', read_header)
+            content = await self.read_data(content_length)
+
+            if self._fast_streaming:
+                self._last_content_length = content_length
+
+
+        return self._data_parser(content)
+
+    async def stream_data(self):
+        """
+        This is a producer loop that initiates the connection and Streams sensor data to the data queue to be consumed
+        elsewhere.
+        :return: None
+        """
+
+        await self.connect()
+        self.stream_active = True
+
+        while self.stream_active:
+
+            data_out = await self.get_data(self._last_content_length)
+
+            await self.data_queue.put(data_out)
+
+    def stop_streaming(self):
+        """
+        Stops the endless loop within the stream_data method.
+        :return: None
+        """
+
+        self.stream_active = False
+
+
+
+class HCommTCPSensorStreamer(HCommTCPStreamer):
     """
     A Class that can stream sensor data from a hyperion instrument.
     """
@@ -406,63 +554,200 @@ class HCommTCPSensorStreamer(HCommTCPClient):
         :param loop:  The event loop that will be used for scheduling tasks.
         :param asyncio.Queue queue: A queue that can be used for transferring streamed data within the main thread.
         """
-        super().__init__(address, port=STREAM_SENSORS_PORT, loop=loop)
+        super().__init__(address,
+                         port=STREAM_SENSORS_PORT,
+                         loop=loop,
+                         queue = queue,
+                         data_parser = HACQSensorData.data_parser,
+                         fast_streaming=True)
 
-        self.content_length = 0
-        self.data_queue = queue
-        self.stream_active = False
 
-    async def stream_data(self):
+class HCommTCPPeaksStreamer(HCommTCPStreamer):
+    """
+    A Class that can stream peaks data from a hyperion instrument.
+    """
+
+    def __init__(self, address: str, loop, queue: asyncio.Queue):
+        """Sets up a new streaming client for sensor data from a hyperion instrument
+
+        :param str address:  The instrument ipV4 address
+        :param loop:  The event loop that will be used for scheduling tasks.
+        :param asyncio.Queue queue: A queue that can be used for transferring streamed data within the main thread.
         """
-        Streams sensor data to the data queue.  This streamlines the data retrieval, and assumes that the number of
-        sensors is going to be constant.
-        :return: None
+        super().__init__(address,
+                         port=STREAM_PEAKS_PORT,
+                         loop=loop,
+                         queue = queue,
+                         data_parser = HACQPeaksData.data_parser,
+                         fast_streaming=True)
+
+
+class HCommTCPSpectrumStreamer(HCommTCPStreamer):
+    """
+    A Class that can stream spectrum data from a hyperion instrument.
+    """
+
+    def __init__(self, address: str, loop, queue: asyncio.Queue, powercal=None):
+        """Sets up a new streaming client for sensor data from a hyperion instrument
+
+        :param str address:  The instrument ipV4 address
+        :param loop:  The event loop that will be used for scheduling tasks.
+        :param asyncio.Queue queue: A queue that can be used for transferring streamed data within the main thread.
         """
 
-        await self.connect()
-        self.stream_active = True
+        #This one line saves many
+        data_parser = partial(HACQSpectrumData.data_parser, powercal=powercal)
 
-        while self.stream_active:
-
-            try:
-                if self.content_length == 0:
-                    read_header = await self.read_data(self.READ_HEADER_LENGTH)
-                    (status, response_type, message_length, self.content_length) = unpack('BBHI', read_header)
-
-                    content = await self.read_data(self.content_length)
-                    data = HACQSensorData(content)
-
-                else:
-                    content = await self.read_data(self.READ_HEADER_LENGTH + self.content_length)
-                    data = HACQSensorData(content[self.READ_HEADER_LENGTH:])
-            except:
-                self.stream_active = False
-                return
+        super().__init__(address,
+                         port=STREAM_SPECTRA_PORT,
+                         loop=loop,
+                         queue = queue,
+                         data_parser = data_parser,
+                         fast_streaming=True)
 
 
-            timestamp = data.header.timestampFrac * 1e-9 + data.header.timestampInt
-
-            await self.data_queue.put({'timestamp': timestamp, 'data': data.data})
-
-    def stop_streaming(self):
-
-        self.stream_active = False
-
-
-class HACQSensorData:
+class HACQSensorData(object):
     """Class that encapsulates sensor data streamed from hyperion
 
     """
     sensor_header = namedtuple('sensor_header',
-                               'headerLength status bufferPercentage reserved serialNumber timestampInt timestampFrac')
+                               ['header_length',
+                                'status',
+                                'buffer_percentage',
+                                'reserved',
+                                'serial_number',
+                                'timestamp_int',
+                                'timestamp_frac'])
 
-    def __init__(self, streamingData):
-        self.header = HACQSensorData.sensor_header._make(unpack('HBBIQII', streamingData[:24]))
+    def __init__(self, streaming_data):
+        header_length = 24
+        self.header = HACQSensorData.sensor_header(*unpack('HBBIQII', streaming_data[:header_length]))
 
-        self.data = np.frombuffer(streamingData[self.header.headerLength:], dtype=np.float)
+        self.data = np.frombuffer(streaming_data[header_length:], dtype=np.float)
+
+    @classmethod
+    def data_parser(cls, streaming_data):
+        """
+        Parser that takes in data from the stream and outputs formatted data in a dictionary
+        :param streaming_data: bytearray of content from Hyperion instrument
+        :type streaming_data: bytearray
+        :return: Data dictionary with 'timestamp' and 'data' keys.
+        :rtype: dict
+        """
+        sensor_data = cls(streaming_data)
+
+        timestamp = sensor_data.header.timestampFrac * 1e-9 + sensor_data.header.timestampInt
+
+        return {'timestamp': timestamp, 'data':sensor_data.data}
+
+class HACQPeaksData(object):
+
+    peaks_header = namdedtuple('peaks_header',
+                               ['length',
+                                'version',
+                                'reserved',
+                                'serial_number',
+                                'timestamp_int',
+                                'timestamp_frac'])
+
+    def __init__(self, raw_data):
+
+        header_length = 24
+
+        self._header = HACQPeaksData.peaks_header(*unpack('HHIQII', raw_data[:header_length]))
+
+        self._peak_counts = np.frombuffer(raw_data[header_length:self._header.length], dtype=np.int16)
+
+        self.channel_boundaries = np.cumsum(self._peak_counts)
+
+        self.data = np.frombuffer(raw_data[self._header.length:], dtype=np.float)
+
+        channel_start = 0
+
+        self.channel_slices = []
+
+        for channel_end in self.channel_boundaries:
+
+            self.channel_slices.append(self.data[channel_start:channel_end])
+            channel_start = channel_end
 
 
-class HPeakDetectionSettings:
+
+    @classmethod
+    def data_parser(cls, raw_data):
+
+        peaks_data = cls(raw_data)
+
+        timestamp = peaks_data._header.timestampFrac * 1e-9 + peaks_data._header.timestampInt
+
+        return {'timestamp': timestamp, 'data':peaks_data.data, 'channel_data':peaks_data.channel_slices}
+
+
+
+class HACQSpectrumData(object):
+
+    spectrum_header = namedtuple('spectrum_header',
+                                 ['length',
+                                  'version',
+                                  'reserved',
+                                  'serial_number',
+                                  'timestamp_int',
+                                  'timestamp_frac',
+                                  'start_wavelength',
+                                  'wavelength_increment',
+                                  'num_points',
+                                  'num_channels',
+                                  'active_channel_bits'])
+
+    def __init__(self, raw_data, powercal = None):
+        header_length = 48
+
+        self._header = HACQSpectrumData.spectrum_header(*unpack('HHIQIIddIHH', raw_data[:header_length]))
+
+        self.data = np.frombuffer(raw_data[header_length:], dtype=np.uint16).reshape((self._header.num_channels,
+                                                                                      self._header.num_points))
+        self.channel_map = np.zeros(self._header.num_channels)
+
+        map_index = 0
+        for channel_index in range[16]:
+            if (self._header.active_channel_bits >> channel_index) & 1:
+                self.channel_map[map_index] = channel_index
+                map_index += 1
+
+        if powercal:
+
+            self.data = self._raw_spectrum_to_db(powercal)
+
+        self.spectra = dict()
+
+        list(map(lambda x,y: self.spectra.update({x + 1:y}), self.channel_map, self.data))
+
+        self.spectra_header = {
+            'start_wavelength' : self._header.start_wavelength,
+            'wavelength_increment': self._header.wavelength_increment,
+            'num_points': self._header.num_points
+        }
+
+    def _raw_spectrum_to_db(self, powercal):
+
+        offsets = powercal.offsets[self.channel_map]
+        scales = powercal.inverse_scales[self.channel_map]
+
+        data_db = (self.data.T * scales + offsets).T
+
+        return data_db
+
+    @classmethod
+    def data_parser(cls, raw_data, powercal=None):
+
+        spectra_data = cls(raw_data, powercal)
+
+        timestamp = spectra_data._header.timestampFrac * 1e-9 + spectra_data._header.timestampInt
+
+        return {'timestamp': timestamp, 'data':spectra_data.spectra, 'header':spectra_data.spectra_header}
+
+
+class HPeakDetectionSettings(object):
     """Class that encapsulates the settings that describe peak detection for a
     hyperion channel.
     """
