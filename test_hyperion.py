@@ -1,5 +1,6 @@
 import hyperion
 import pytest
+from time import sleep
 
 instrument_ip = '10.0.41.100'
 
@@ -89,11 +90,19 @@ def test_hyperion_properties():
 
     hyp_inst.static_network_settings = test_static_net_settings
 
+
+    sleep(2)
+
     hyp_inst.network_ip_mode = 'static'
+
+    sleep(2)
+
 
     assert hyp_inst.static_network_settings == test_static_net_settings
 
     hyp_inst.static_network_settings = static_net_settings
+
+    sleep(2)
 
     hyp_inst.instrument_utc_date_time = hyp_inst.instrument_utc_date_time
 
