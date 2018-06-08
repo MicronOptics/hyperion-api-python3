@@ -49,7 +49,7 @@ class Hyperion(object):
         :type: str
         """
 
-        return str(self._execute_command('#GetSerialNumber').content)
+        return self._execute_command('#GetSerialNumber').content.decode()
 
 
     @property
@@ -68,7 +68,7 @@ class Hyperion(object):
         :type: str
         """
 
-        return str(self._execute_command('#GetFirmwareVersion').content)
+        return self._execute_command('#GetFirmwareVersion').content.decode()
 
     @property
     def fpga_version(self):
@@ -76,7 +76,7 @@ class Hyperion(object):
         The version of FPGA code on the instrument.
         :type: str
         """
-        return str(self._execute_command('#GetFPGAVersion').content)
+        return self._execute_command('#GetFPGAVersion').content.decode()
 
     @property
     def instrument_name(self):
@@ -85,7 +85,7 @@ class Hyperion(object):
         :type: str
         """
 
-        return str(self._execute_command('#GetInstrumentName').content)
+        return self._execute_command('#GetInstrumentName').content.decode()
 
     @instrument_name.setter
     def instrument_name(self, name: str):
@@ -121,8 +121,9 @@ class Hyperion(object):
     @property
     def available_detection_settings(self):
         """
-        A tuple of all detection settings presets that are present on the instrument.
-        :type: tuple of HPeakDetectionSettings
+        A dictionary of all detection settings presets that are present on the instrument, with keys equal to the
+        setting_id.
+        :type: list of HPeakDetectionSettings
         """
 
         detection_settings_data = self._execute_command('#GetAvailableDetectionSettings').content
@@ -212,7 +213,7 @@ class Hyperion(object):
         :type: NetworkSettings namedtuple
         """
 
-        net_addresses = self._execute_command('#GetStaticNetworkSettings')
+        net_addresses = self._execute_command('#GetStaticNetworkSettings').content
 
         address = socket.inet_ntoa(net_addresses[:4])
         mask = socket.inet_ntoa(net_addresses[4:8])
@@ -223,11 +224,20 @@ class Hyperion(object):
     @static_network_settings.setter
     def static_network_settings(self, network_settings: NetworkSettings):
 
+        current_settings = self.static_network_settings
+        ip_mode = self.network_ip_mode
+
+
         argument = '{0} {1} {2}'.format(network_settings.address,
                                         network_settings.netmask,
                                         network_settings.gateway)
 
         self._execute_command('#SetStaticNetworkSettings', argument)
+
+
+        if ip_mode == 'STATIC' and current_settings.address != network_settings.address:
+            self._address = network_settings.address
+
 
 
 
@@ -238,12 +248,16 @@ class Hyperion(object):
         :type: str
         """
 
-        return str(self._execute_command('#GetNetworkIpMode').content)
+        return self._execute_command('#GetNetworkIpMode').content.decode()
 
     @network_ip_mode.setter
     def network_ip_mode(self, mode):
 
+        update_ip = False
         if mode in ['Static', 'static', 'STATIC']:
+            if self.network_ip_mode in ['dynamic', 'Dynamic', 'DHCP', 'dhcp']:
+                update_ip = True
+                new_ip = self.static_network_settings.address
             command = '#EnableStaticIpMode'
         elif mode in ['dynamic', 'Dynamic', 'DHCP', 'dhcp']:
             command = '#EnableDynamicIpMode'
@@ -251,6 +265,9 @@ class Hyperion(object):
             raise HyperionError('Hyperion Error:  Unknown Network IP Mode requested')
 
         self._execute_command(command)
+
+        if update_ip:
+            self._address = new_ip
 
     @property
     def instrument_utc_date_time(self):
@@ -260,14 +277,15 @@ class Hyperion(object):
         :type: datetime.datetime
         """
 
-        date_data = self._execute_command('#GetInstrumentUtcDateTime')
+        date_data = self._execute_command('#GetInstrumentUtcDateTime').content
 
-        return datetime(*unpack('HHHHH', date_data))
+        return datetime(*unpack('HHHHHH', date_data))
 
     @instrument_utc_date_time.setter
     def instrument_utc_date_time(self, date_time: datetime):
 
-        self._execute_command('#SetInstrumentUtcDateTime', datetime.strftime('Y m d H M S'))
+        self._execute_command('#SetInstrumentUtcDateTime', date_time.strftime('%Y %m %d %H %M %S'))
+
 
 
     @property
@@ -299,7 +317,7 @@ class Hyperion(object):
         :type: str
         """
 
-        return str(self._execute_command('#GetNtpServer').content)
+        return self._execute_command('#GetNtpServer').content.decode()
 
 
     @ntp_server.setter
@@ -325,6 +343,115 @@ class Hyperion(object):
             argument = '0'
 
         self._execute_command('#SetPtpEnabled', argument)
+
+    # ******************************************************************************
+    # Sensors API
+    # ******************************************************************************
+
+    def add_sensor(self, name, model, channel, wavelength, calibration_factor, distance=0):
+        """Add a sensor to the hyperion instrument.  Added sensors will stream data over the sensor streaming port.
+        :param name: Sensor name.  This is an arbitrary string provided by user.
+        :param model: Sensor model.  This must match the specific model, currently either os7510 or os7520.
+        :param channel: Instrument channel on which the sensor is present.  First channel is 1.
+        :param wavelength: The wavelength band of the sensor.
+        :param calibration_factor: The calibration constant for the sensor.
+        :param distance: Fiber length from sensor to interrogator, in meters, integer.
+        :return: None
+        """
+        argument = '{0} {1} {2} {3} {4} {5}'.format(name, model, channel, distance, wavelength,
+                                                    calibration_factor)
+        self._execute_command("#AddSensor", argument)
+
+    def get_sensor_names(self):
+        """
+        Get the list of user defined names for sensors currently defined on the instrument.
+        :return: Array of strings containing the sensor names
+        """
+        response = self._execute_command('#GetSensorNames')
+        if response.message == '':
+            return None
+
+        return response.message.split(' ')
+
+    def export_sensors(self):
+        """Returns all configuration data for all sensors that are currently defined on the instrument.
+
+        :return: Array of dictionaries containing the sensor configuration
+        """
+        sensor_export = self._execute_command('#ExportSensors').content
+
+        header_version, num_sensors = unpack('HH', sensor_export[:4])
+        sensor_export = sensor_export[4:]
+        sensor_configs = []
+
+        for sensor_num in range(num_sensors):
+            sensor_config = dict()
+            sensor_config['version'], = unpack('H', sensor_export[:2])
+            sensor_export = sensor_export[2:]
+
+            sensor_config['id'] = list(bytearray(sensor_export[:16]))
+            sensor_export = sensor_export[16:]
+
+            name_length, = unpack('H', sensor_export[:2])
+
+            sensor_export = sensor_export[2:]
+            sensor_config['name'] = sensor_export[:name_length].decode()
+            sensor_export = sensor_export[name_length:]
+
+            model_length, = unpack('H', sensor_export[:2])
+            sensor_export = sensor_export[2:]
+            sensor_config['model'] = sensor_export[:model_length].decode()
+            sensor_export = sensor_export[model_length:]
+
+            sensor_config['channel'], = unpack('H', sensor_export[:2])
+            sensor_config['channel'] += 1
+            sensor_export = sensor_export[2:]
+
+            sensor_config['distance'], = unpack('d', sensor_export[:8])
+
+            # drop 2 bytes for reserved field
+            sensor_export = sensor_export[10:]
+
+            detail_keys = ('wavelength',
+                           'calibration_factor',
+                           'rc_gain',
+                           'rc_thresholdHigh',
+                           'rc_thresholdLow')
+
+            sensor_details = dict(zip(detail_keys, unpack('ddddd', sensor_export[:40])))
+            sensor_export = sensor_export[40:]
+            sensor_config.update(sensor_details)
+            sensor_configs.append(sensor_config)
+        return sensor_configs
+
+    def remove_sensors(self, sensor_names=None):
+        """Removes Sensors by name
+
+        :param sensor_names: This can be a single sensor name string or a list of sensor names strings.  If omitted,
+        all sensors are removed.
+        :return: None
+        """
+
+        if sensor_names is None:
+            sensor_names = self.get_sensor_names()
+        elif type(sensor_names) == str:
+            sensor_names = [sensor_names]
+        try:
+            for name in sensor_names:
+                self._execute_command('#removeSensor', name)
+
+        except TypeError:
+            pass
+
+    def save_sensors(self):
+        """Saves all sensors to persistent storage.
+
+        :return: None
+        """
+
+        self._execute_command('#saveSensors')
+
+
 
 
 
@@ -388,10 +515,12 @@ class HCommTCPClient(object):
         if message_length > 0:
             message = await self.read_data(message_length)
         else:
-            message = ''
+            message = b''
         if status != SUCCESS:
             self.read_buffer = bytearray()
-            raise (HyperionError(message))
+            loop = asyncio.get_event_loop()
+            loop.call_exception_handler({'message':message.decode()})
+            #raise (HyperionError(message))
 
 
         content = await self.read_data(content_length)
@@ -453,9 +582,20 @@ class HCommTCPClient(object):
 
         h1 = HCommTCPClient(address, COMMAND_PORT, exec_loop)
 
+        error_report = {'status':False}
+
+        def exception_handler(loop, context):
+
+            error_report['status'] = True
+            error_report['message'] = context['message']
+
+        exec_loop.set_exception_handler(exception_handler)
         exec_loop.run_until_complete(h1.execute_command(command, argument, request_options))
 
         h1.writer.close()
+
+        if error_report['status']:
+            raise HyperionError(error_report['message'])
 
         return h1.last_response
 
@@ -642,13 +782,13 @@ class HACQSensorData(object):
 
 class HACQPeaksData(object):
 
-    peaks_header = namdedtuple('peaks_header',
-                               ['length',
-                                'version',
-                                'reserved',
-                                'serial_number',
-                                'timestamp_int',
-                                'timestamp_frac'])
+    peaks_header = namedtuple('peaks_header',
+                              ['length',
+                               'version',
+                               'reserved',
+                               'serial_number',
+                               'timestamp_int',
+                               'timestamp_frac'])
 
     def __init__(self, raw_data):
 
@@ -789,31 +929,47 @@ class HPeakDetectionSettings(object):
 
     @classmethod
     def from_binary_data(cls, detection_settings_data):
+        """
 
-        (setting_id, name_length) = unpack('BB', detection_settings_data[:2])
-        detection_settings_data = detection_settings_data[2:]
+        :param detection_settings_data: Byte array of detection settings in binary format as returned from instrument
+        :type detection_settings_data: bytearray
+        :return: All of the detection settings in detection_settings_data, parsed as HPeakDetectionSettings objects.
+        Returned as a dict with the keys being the setting_id
+        :rtype: dict of HPeakDetectionSettings
+        """
 
-        name = detection_settings_data[: name_length]
-        detection_settings_data = detection_settings_data[name_length:]
+        detection_settings = {}
 
-        (description_length,) = unpack('B', detection_settings_data[0])
-        detection_settings_data = detection_settings_data[1:]
+        while len(detection_settings_data):
 
-        description = detection_settings_data[: description_length]
+            (setting_id, name_length) = unpack('BB', detection_settings_data[:2])
+            detection_settings_data = detection_settings_data[2:]
 
-        (boxcar_length, diff_filter_length, lockout,
-         ntv_period, threshold, mode) = \
-            unpack('HHHHiB', detection_settings_data[description_length:(description_length + 13)])
-        # Use _remainingData in case more than one preset is contained in detectionSettingsData
-        remaining_data = detection_settings_data[(description_length + 13):]
+            name = detection_settings_data[: name_length].decode()
+            detection_settings_data = detection_settings_data[name_length:]
 
-        if (mode == 0):
-            mode = 'Valley'
-        else:
-            mode = 'Peak'
+            description_length = detection_settings_data[0]
+            detection_settings_data = detection_settings_data[1:]
 
-        return cls(setting_id, name, description, boxcar_length, diff_filter_length,
-                   lockout, ntv_period, threshold, mode), HPeakDetectionSettings.from_binary_data(remaining_data)
+            description = detection_settings_data[: description_length].decode()
+
+            (boxcar_length, diff_filter_length, lockout,
+             ntv_period, threshold, mode) = \
+                unpack('HHHHiB', detection_settings_data[description_length:(description_length + 13)])
+            # In case more than one preset is contained in detectionSettingsData
+            detection_settings_data = detection_settings_data[(description_length + 13):]
+
+            if (mode == 0):
+                mode = 'Valley'
+            else:
+                mode = 'Peak'
+
+            detection_settings[setting_id] = (cls(setting_id, name, description, boxcar_length, diff_filter_length,
+                                                  lockout, ntv_period, threshold, mode))
+
+
+
+        return detection_settings
 
     def pack(self):
 
