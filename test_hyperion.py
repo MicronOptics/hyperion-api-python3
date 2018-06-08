@@ -1,15 +1,16 @@
 import hyperion
+import pytest
 
 instrument_ip = '10.0.41.100'
 
-def _est_hyperion_tcp_comm():
+def test_hyperion_tcp_comm():
 
     response = hyperion.HCommTCPClient.hyperion_command(instrument_ip, "#GetSerialNumber")
 
     assert response.content[:3].decode() == 'HIA'
     assert len(response.content) == 6
 
-def _est_hyperion_properties():
+def test_hyperion_properties():
 
     hyp_inst = hyperion.Hyperion(instrument_ip)
 
@@ -102,6 +103,18 @@ def _est_hyperion_properties():
 
     hyp_inst.ntp_server = hyp_inst.ntp_server
 
+    peaks = hyp_inst.peaks
+
+    channel_peaks = hyp_inst.peaks[1]
+
+    spectra = hyp_inst.spectra
+
+    channel_spectra = hyp_inst.spectra[active_channels[0]]
+
+    assert channel_spectra.size == spectra.spectra_header['num_points']
+
+
+
 
 def test_sensors_api():
 
@@ -146,5 +159,37 @@ def test_sensors_api():
 
 
     hyp_inst.remove_sensors()
+
+
+def test_detection_settings_api():
+
+    hyp_inst = hyperion.Hyperion(instrument_ip)
+
+    detection_setting = hyp_inst.get_detection_setting(128)
+
+    detection_setting.setting_id = 1
+
+    hyp_inst.add_or_update_detection_setting(detection_setting)
+
+    detection_setting.name = 'Test update detection setting'
+
+    hyp_inst.add_or_update_detection_setting(detection_setting)
+
+    new_setting = hyp_inst.get_detection_setting(detection_setting.setting_id)
+
+    assert new_setting.name == detection_setting.name
+
+    hyp_inst.remove_detection_setting(detection_setting.setting_id)
+
+    with pytest.raises(hyperion.HyperionError):
+        hyp_inst.get_detection_setting(detection_setting.setting_id)
+
+
+
+
+
+
+
+
 
 
