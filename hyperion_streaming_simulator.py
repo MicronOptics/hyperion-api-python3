@@ -18,7 +18,7 @@ def sensor_streamer(num_sensors, address=instrument_ip):
     queue = asyncio.Queue(maxsize=5, loop=loop)
 
 
-    sensor_streamer = hyperion.HCommTCPSensorStreamer(instrument_ip, loop, queue)
+    sensor_streamer = hyperion.HCommTCPSensorStreamer(address, loop, queue)
 
     async def get_data():
         print('starting acquisition')
