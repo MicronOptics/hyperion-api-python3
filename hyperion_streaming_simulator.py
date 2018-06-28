@@ -10,7 +10,7 @@ instrument_ip = '10.0.10.46'
 
 
 
-def sensor_streamer(num_sensors):
+def sensor_streamer(num_sensors, address=instrument_ip):
 
 
     serial_numbers = []
