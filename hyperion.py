@@ -28,7 +28,7 @@ Version 2.0.0.0
 This version is a breaking change and is not backwards compatible with version 1.x.  It is
 written for Python version 3.5 or above.
 
-The changes make the entire module much more phythonic than the previous version, and should result
+The changes make the entire module much more pythonic than the previous version, and should result
 in more streamlined and readable code.
 
 In addition, there are now streaming classes that simplify the process of setting up streaming of
@@ -287,6 +287,9 @@ class HCommTCPStreamer(HCommTCPClient):
 
         #put a final empty data set in the queue
 
+        print("Stream no longer active.")
+        print("Sending end of stream")
+
         await self.data_queue.put({'data':None})
 
         await self.data_queue.join()
@@ -298,7 +301,7 @@ class HCommTCPStreamer(HCommTCPClient):
         Stops the endless loop within the stream_data method.
         :return: None
         """
-
+        print("Stopping Stream")
         self.stream_active = False
 
 
