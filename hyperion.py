@@ -42,6 +42,11 @@ from collections import namedtuple
 import numpy as np
 from datetime import datetime
 from functools import partial
+import logging
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
+
 
 
 COMMAND_PORT = 51971
@@ -233,7 +238,7 @@ class HCommTCPStreamer(HCommTCPClient):
         """
 
         super().__init__(address, port=port, loop=loop)
-
+        logger.debug('Streaming initiated on: {0}:{1}'.format(address,port))
         self.data_queue = queue
         self.stream_active = False
         self._data_parser = data_parser or (lambda data_in: {'data': data_in})
@@ -264,6 +269,7 @@ class HCommTCPStreamer(HCommTCPClient):
             content = await self.read_data(content_length)
 
             if self._fast_streaming:
+                logger.debug('First data retrieved from stream')
                 self._last_content_length = content_length
 
 
@@ -277,6 +283,7 @@ class HCommTCPStreamer(HCommTCPClient):
         """
 
         await self.connect()
+        logger.debug('Stream connected')
         self.stream_active = True
 
         while self.stream_active:
@@ -1048,6 +1055,18 @@ class Hyperion(object):
         setting_data = self.get_detection_setting(unpack('H', id_data)[0])
 
         return setting_data
+
+    def set_channel_detection_setting_id(self, channel, detection_setting_id):
+        """
+        Assign the specified detection setting to the specified channel.
+        :param channel: The channel for which the setting is updated.
+        :type channel: int
+        :param detection_setting_id: The id of the detection setting to use
+        :type detection_setting_id: int
+        """
+        argument = "{0} {1}".format(channel, detection_setting_id)
+
+        self._execute_command("#SetChannelDetectionSettingID", argument)
 
 
     def set_peak_offsets_in_counts(self, channel, peak_offset_settings):

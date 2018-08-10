@@ -5,7 +5,7 @@ import numpy as np
 
 from time import sleep
 
-instrument_ip = '10.0.41.100'
+instrument_ip = '10.0.6.177'
 
 
 @pytest.fixture(scope='module')
@@ -15,6 +15,10 @@ def test_sensors():
         ['sensor_2', 'os7510', 1, 1530.0, 66.0],
         ['sensor_3', 'os7510', 2, 1550.0, 66.0],
         ['sensor_4', 'os7510', 2, 1570.0, 66.0]
+    ]
+
+    sensors = [
+        ['sensor_1', 'os7520', 1, 1590.0, 2300.0],
     ]
 
     return sensors
