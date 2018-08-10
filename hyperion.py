@@ -244,6 +244,7 @@ class HCommTCPStreamer(HCommTCPClient):
         self._data_parser = data_parser or (lambda data_in: {'data': data_in})
         self._last_content_length = None
         self._fast_streaming = fast_streaming
+        self._stream_counter = 0
 
 
     async def get_data(self, content_length = None):
@@ -291,11 +292,13 @@ class HCommTCPStreamer(HCommTCPClient):
             data_out = await self.get_data(self._last_content_length)
 
             await self.data_queue.put(data_out)
+            self._stream_counter += 1
 
         #put a final empty data set in the queue
 
-        print("Stream no longer active.")
-        print("Sending end of stream")
+        logger.info("Stream no longer active.")
+        logger.info("Sending end of stream.")
+        logger.debug("Stream counter: {0}".format(self._stream_counter))
 
         await self.data_queue.put({'data':None})
 
@@ -308,7 +311,7 @@ class HCommTCPStreamer(HCommTCPClient):
         Stops the endless loop within the stream_data method.
         :return: None
         """
-        print("Stopping Stream")
+        logger.info("Stopping Stream")
         self.stream_active = False
 
 
@@ -394,7 +397,7 @@ class HACQSensorData(object):
         header_length = 24
         self.header = HACQSensorData.SensorHeader(*unpack('HBBIQII', streaming_data[:header_length]))
 
-        self.data = np.frombuffer(streaming_data[header_length:], dtype=np.float)
+        self.data = np.frombuffer(streaming_data[self.header.header_length:], dtype=np.float)
 
     @classmethod
     def data_parser(cls, streaming_data):
