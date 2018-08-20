@@ -196,7 +196,7 @@ class HCommTCPClient(object):
         :return: The response as a HyperionResponse namedTuple
         :rtype: HyperionResponse
         """
-        exec_loop = asyncio.get_event_loop()
+        exec_loop = asyncio.new_event_loop()
 
         h1 = HCommTCPClient(address, COMMAND_PORT, exec_loop)
 
@@ -211,6 +211,7 @@ class HCommTCPClient(object):
         exec_loop.run_until_complete(h1.execute_command(command, argument, request_options))
 
         h1.writer.close()
+        exec_loop.close()
 
         if error_report['status']:
             raise HyperionError(error_report['message'])
