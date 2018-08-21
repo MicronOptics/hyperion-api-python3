@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fea4cbc6-f5b0-41dc-9865-40d69ff111fd" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/hyperion_streaming.py" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/hyperion.py" afterPath="$PROJECT_DIR$/hyperion.py" />
+      <change beforePath="$PROJECT_DIR$/test_hyperion_streaming.py" afterPath="$PROJECT_DIR$/test_hyperion_streaming.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,14 +18,15 @@
     <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_streaming_simulator_test_sensor_streamer.coverage" NAME="py.test for test_hyperion_streaming_simulator.test_sensor_streamer Coverage Results" MODIFIED="1529101521837" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_test_hyperion_tcp_comm.coverage" NAME="py.test for test_hyperion.test_hyperion_tcp_comm Coverage Results" MODIFIED="1525878935567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_test_detection_settings_api.coverage" NAME="py.test for test_hyperion.test_detection_settings_api Coverage Results" MODIFIED="1528470005884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_in_test_hyperion_streaming_py.coverage" NAME="py.test in test_hyperion_streaming.py Coverage Results" MODIFIED="1528481191492" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_in_test_hyperion_streaming_py.coverage" NAME="py.test in test_hyperion_streaming.py Coverage Results" MODIFIED="1534854018328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_test_sensors_api.coverage" NAME="py.test for test_hyperion.test_sensors_api Coverage Results" MODIFIED="1528408304238" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_in_test_hyperion_py.coverage" NAME="py.test in test_hyperion.py Coverage Results" MODIFIED="1528470738774" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hyperion_api_python3$hyperion_streaming_simulator.coverage" NAME="hyperion_streaming_simulator Coverage Results" MODIFIED="1530220860353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_streaming_test_sensors.coverage" NAME="py.test for test_hyperion_streaming.test_sensors Coverage Results" MODIFIED="1528480887461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_test_hyperion_properties.coverage" NAME="py.test for test_hyperion.test_hyperion_properties Coverage Results" MODIFIED="1528487368376" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_streaming_test_sensor_streamer.coverage" NAME="py.test for test_hyperion_streaming.test_sensor_streamer Coverage Results" MODIFIED="1533911039599" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming.coverage" NAME="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming Coverage Results" MODIFIED="1533929813603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_streaming_test_sensor_streamer.coverage" NAME="py.test for test_hyperion_streaming.test_sensor_streamer Coverage Results" MODIFIED="1534853624660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/hyperion_api_python3$py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming.coverage" NAME="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming Coverage Results" MODIFIED="1534853593900" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/hyperion_api_python3$hyperion_streaming.coverage" NAME="hyperion_streaming Coverage Results" MODIFIED="1534855988481" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -38,14 +42,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="hyperion.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="hyperion.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hyperion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-762">
-              <caret line="213" column="25" lean-forward="false" selection-start-line="213" selection-start-column="25" selection-end-line="213" selection-end-column="25" />
+            <state relative-caret-position="305">
+              <caret line="212" column="25" lean-forward="false" selection-start-line="212" selection-start-column="25" selection-end-line="212" selection-end-column="25" />
               <folding>
                 <element signature="e#1634#1648#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="getspectrumandpeaksplot.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/SimpleExamples/getspectrumandpeaksplot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -56,6 +70,18 @@
             <state relative-caret-position="900">
               <caret line="1682" column="6" lean-forward="false" selection-start-line="1682" selection-start-column="6" selection-end-line="1682" selection-end-column="6" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hyperion_full_async.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hyperion_full_async.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="666" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -72,11 +98,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hyperion_streaming_simulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hyperion_streaming_simulator.py">
+      <file leaf-file-name="test_hyperion_streaming.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test_hyperion_streaming.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+            <state relative-caret-position="563">
+              <caret line="146" column="0" lean-forward="false" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -84,13 +110,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_hyperion_streaming.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test_hyperion_streaming.py">
+      <file leaf-file-name="hyperion_streaming.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/hyperion_streaming.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="119" column="5" lean-forward="false" selection-start-line="119" selection-start-column="5" selection-end-line="119" selection-end-column="5" />
+            <state relative-caret-position="360">
+              <caret line="62" column="23" lean-forward="false" selection-start-line="62" selection-start-column="23" selection-end-line="62" selection-end-column="23" />
               <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#2#17#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -105,6 +131,19 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>@property</find>
+      <find>self._execute_command</find>
+      <find>).content</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>def</replace>
+      <replace>async def</replace>
+      <replace>await self._execute_command</replace>
+      <replace>)).content</replace>
+    </replaceStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -114,7 +153,10 @@
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/test_hyperion.py" />
         <option value="$PROJECT_DIR$/hyperion_streaming_simulator.py" />
+        <option value="$PROJECT_DIR$/hyperion_full_async.py" />
+        <option value="$PROJECT_DIR$/SimpleExamples/getspectrumandpeaksplot.py" />
         <option value="$PROJECT_DIR$/test_hyperion_streaming.py" />
+        <option value="$PROJECT_DIR$/hyperion_streaming.py" />
         <option value="$PROJECT_DIR$/hyperion.py" />
       </list>
     </option>
@@ -144,6 +186,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -152,11 +195,15 @@
               <item name="hyperion-api-python3" type="b2602c69:ProjectViewProjectNode" />
               <item name="hyperion-api-python3" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="hyperion-api-python3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hyperion-api-python3" type="462c0819:PsiDirectoryNode" />
+              <item name="SimpleExamples" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -189,7 +236,26 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming">
+  <component name="RunManager" selected="Python.hyperion_streaming">
+    <configuration name="hyperion_streaming" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="hyperion-api-python3" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/hyperion_streaming.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="hyperion_streaming_simulator" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -208,22 +274,6 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="py.test for hyperion_streaming_simulator.test_sensor_streamer" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="hyperion-api-python3" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;hyperion_streaming_simulator.test_sensor_streamer&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
     <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -257,7 +307,7 @@
       <option name="_new_target" value="&quot;test_hyperion_streaming.test_sensor_streamer&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
-    <configuration name="py.test for test_hyperion.test_hyperion_properties" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="py.test in test_hyperion_streaming.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
@@ -270,23 +320,23 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_hyperion.test_hyperion_properties&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/test_hyperion_streaming.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion.test_hyperion_properties" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.py.test for hyperion_streaming_simulator.test_sensor_streamer" />
-      <item index="2" class="java.lang.String" itemvalue="Python.hyperion_streaming_simulator" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_sensor_streamer" />
-      <item index="4" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" />
+      <item index="0" class="java.lang.String" itemvalue="Python.hyperion_streaming_simulator" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_sensor_streamer" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.py.test in test_hyperion_streaming.py" />
+      <item index="4" class="java.lang.String" itemvalue="Python.hyperion_streaming" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_sensor_streamer" />
-        <item index="2" class="java.lang.String" itemvalue="Python.hyperion_streaming_simulator" />
-        <item index="3" class="java.lang.String" itemvalue="Python tests.py.test for hyperion_streaming_simulator.test_sensor_streamer" />
-        <item index="4" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion.test_hyperion_properties" />
+        <item index="0" class="java.lang.String" itemvalue="Python.hyperion_streaming" />
+        <item index="1" class="java.lang.String" itemvalue="Python tests.py.test in test_hyperion_streaming.py" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_sensor_streamer" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" />
+        <item index="4" class="java.lang.String" itemvalue="Python.hyperion_streaming_simulator" />
       </list>
     </recent_temporary>
   </component>
@@ -385,18 +435,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming - 2018.08.10 at 13h 26m 16s.xml">
-      <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" configurationId="tests" />
-    </history-entry>
-    <history-entry file="py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming - 2018.08.10 at 14h 00m 57s.xml">
-      <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" configurationId="tests" />
-    </history-entry>
-    <history-entry file="py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming - 2018.08.10 at 14h 26m 42s.xml">
-      <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" configurationId="tests" />
-    </history-entry>
-    <history-entry file="py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming - 2018.08.10 at 14h 57m 54s.xml">
-      <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" configurationId="tests" />
-    </history-entry>
     <history-entry file="py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming - 2018.08.10 at 15h 09m 42s.xml">
       <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" configurationId="tests" />
     </history-entry>
@@ -415,22 +453,33 @@
     <history-entry file="py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming - 2018.08.10 at 15h 36m 56s.xml">
       <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" configurationId="tests" />
     </history-entry>
+    <history-entry file="py_test_for_test_hyperion_streaming_test_multiprocess_sensor_streaming - 2018.08.21 at 08h 14m 29s.xml">
+      <configuration name="py.test for test_hyperion_streaming.test_multiprocess_sensor_streaming" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_for_test_hyperion_streaming_test_sensor_streamer - 2018.08.21 at 08h 14m 33s.xml">
+      <configuration name="py.test for test_hyperion_streaming.test_sensor_streamer" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_hyperion_streaming_py - 2018.08.21 at 08h 16m 14s.xml">
+      <configuration name="py.test in test_hyperion_streaming.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_hyperion_streaming_py - 2018.08.21 at 08h 20m 40s.xml">
+      <configuration name="py.test in test_hyperion_streaming.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32958034" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32958034" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32958034" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32958034" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26495728" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26495728" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32967034" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26800978" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26800978" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -474,34 +523,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../hyperion-api-python/hyperion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25155">
-          <caret line="1682" column="6" lean-forward="false" selection-start-line="1682" selection-start-column="6" selection-end-line="1682" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_hyperion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1365">
-          <caret line="93" column="11" lean-forward="false" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/hyperion_streaming_simulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_hyperion_streaming.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1665">
@@ -545,7 +566,7 @@
         <state relative-caret-position="195">
           <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -593,7 +614,7 @@
         <state relative-caret-position="195">
           <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -643,7 +664,7 @@
         <state relative-caret-position="135">
           <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -683,7 +704,7 @@
         <state relative-caret-position="135">
           <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -713,7 +734,7 @@
         <state relative-caret-position="720">
           <caret line="53" column="21" lean-forward="false" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -732,6 +753,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#23#55#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -905,6 +929,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#23#55#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -912,6 +939,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#15#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_hyperion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="93" column="11" lean-forward="false" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
@@ -926,32 +963,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/SimpleExamples/getspectrumandpeaksplot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="93" column="11" lean-forward="false" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="510">
+          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_hyperion_streaming.py">
+    <entry file="file://$PROJECT_DIR$/hyperion_full_async.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="119" column="5" lean-forward="false" selection-start-line="119" selection-start-column="5" selection-end-line="119" selection-end-column="5" />
+        <state relative-caret-position="45">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="666" selection-end-column="0" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-762">
-          <caret line="213" column="25" lean-forward="false" selection-start-line="213" selection-start-column="25" selection-end-line="213" selection-end-column="25" />
+        <state relative-caret-position="305">
+          <caret line="212" column="25" lean-forward="false" selection-start-line="212" selection-start-column="25" selection-end-line="212" selection-end-column="25" />
           <folding>
             <element signature="e#1634#1648#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_hyperion_streaming.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="146" column="0" lean-forward="false" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hyperion_streaming.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="62" column="23" lean-forward="false" selection-start-line="62" selection-start-column="23" selection-end-line="62" selection-end-column="23" />
+          <folding>
+            <element signature="e#2#17#0" expanded="true" />
           </folding>
         </state>
       </provider>

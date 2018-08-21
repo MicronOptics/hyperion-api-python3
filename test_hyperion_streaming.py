@@ -72,7 +72,8 @@ def test_sensor_streamer(test_sensors):
     for sensor in test_sensors:
         hyp_inst.add_sensor(*sensor)
 
-
+    sensors = hyp_inst.get_sensor_names()
+    logger.debug('Sensors added: {0}'.format(sensors))
     loop = asyncio.get_event_loop()
     queue = asyncio.Queue(maxsize=5, loop=loop)
     stream_active = True
@@ -144,7 +145,6 @@ def test_multiprocess_sensor_streaming(test_sensors):
                     logger.debug('stream stopped')
                     break
 
-            logger.debug('Last data: {0}'.format(last_data['data'].data))
 
         loop.create_task(get_data())
 
