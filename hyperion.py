@@ -519,6 +519,11 @@ class HACQSpectrumData(object):
             raise HyperionError('No data for requested channel.  Make sure requested channel is in the set of full'
                                 ' spectrum channel numbers.  See Hyperion.active_full_spectrum_channel_numbers')
 
+    @property
+    def wavelengths(self):
+
+        return (self.spectra_header['start_wavelength'] +
+                np.arange(self.spectra_header['num_points'])*self.spectra_header['wavelength_increment'])
 
     def _raw_spectrum_to_db(self, powercal):
 

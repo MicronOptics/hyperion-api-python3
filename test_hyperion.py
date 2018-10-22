@@ -2,7 +2,7 @@ import hyperion
 import pytest
 from time import sleep
 
-instrument_ip = '10.0.41.100'
+instrument_ip = '10.0.10.71'
 
 def test_hyperion_tcp_comm():
 
