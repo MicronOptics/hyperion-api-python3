@@ -19,7 +19,7 @@ import hyperion
 
 
 channel = 1
-h1 = hyperion.Hyperion('10.0.41.3')
+h1 = hyperion.Hyperion('10.0.10.71')
 
 
 peaks = h1.peaks[channel]

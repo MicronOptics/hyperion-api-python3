@@ -9,7 +9,7 @@ import hyperion
 import asyncio
 import numpy as np
 
-instrument_ip = '10.0.41.3'
+instrument_ip = '10.0.10.71'
 
 loop = asyncio.get_event_loop()
 queue = asyncio.Queue(maxsize=5, loop=loop)

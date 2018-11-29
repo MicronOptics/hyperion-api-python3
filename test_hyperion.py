@@ -33,7 +33,7 @@ def test_hyperion_properties():
 
     assert hyp_inst.instrument_name == test_name
 
-    hyp_inst.instrument_name = original_name
+    hyp_inst.instrument_name = original_name.replace(' ', '_');
 
     assert hyp_inst.instrument_name == original_name
 

@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 from time import sleep
 
-instrument_ip = '192.168.2.5'
+instrument_ip = '10.0.10.71'
 
 
 @pytest.fixture(scope='module')
@@ -203,8 +203,8 @@ def test_peak_streamer():
     loop.call_later(streaming_time, peaks_streamer.stop_streaming)
 
     loop.run_until_complete(peaks_streamer.stream_data())
-
-    assert (np.diff(np.array(serial_numbers)) == 1).all()
+    sn_diffs = np.diff(np.array(serial_numbers))
+    assert (sn_diffs == 1).all()
 
 
 def test_spectrum_streamer():

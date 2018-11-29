@@ -18,7 +18,7 @@ import sys
 import hyperion
 
 
-h1 = hyperion.Hyperion('10.0.41.3')
+h1 = hyperion.Hyperion('10.0.10.71')
 
 #Get the spectrum
 

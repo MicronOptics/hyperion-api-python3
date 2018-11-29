@@ -9,17 +9,20 @@ import hyperion
 import asyncio
 import numpy as np
 
-instrument_ip = '10.0.41.3'
+instrument_ip = '10.0.10.42'
 
 hyp_inst = hyperion.Hyperion(instrument_ip)
 hyp_inst.remove_sensors()
 
 test_sensors = [
+    # edit this to define your own sensors
+    #     Name        Model   chan. wl     cal
         ['sensor_1', 'os7520', 1, 1590.0, 2300.0],
         ['sensor_2', 'os7520', 1, 1610.0, 2300.0],
         ['sensor_3', 'os7510', 2, 1550.0, 66.0],
         ['sensor_4', 'os7510', 2, 1570.0, 66.0]
     ]
+
 
 for sensor in test_sensors:
     hyp_inst.add_sensor(*sensor)
@@ -43,15 +46,13 @@ async def get_data():
         queue.task_done()
         if sensor_data['data']:
             serial_numbers.append(sensor_data['data'].header.serial_number)
-
-
         else:
             break
 
 
 loop.create_task(get_data())
 
-streaming_time = 5  # seconds
+streaming_time = 30  # seconds
 
 loop.call_later(streaming_time, sensor_streamer.stop_streaming)
 

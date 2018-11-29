@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2018 Micron Optics, Inc.
+# Copyright (c) 2018 Luna Innovations, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -31,8 +31,13 @@ written for Python version 3.5 or above.
 The changes make the entire module much more pythonic than the previous version, and should result
 in more streamlined and readable code.
 
-In addition, there are now streaming classes that simplify the process of setting up streaming of
-peaks, sensors, or spectra.
+There are now streaming classes that simplify the process of setting up streaming of
+peaks, sensors, or spectra. (HCommTCPSensorStreamer, HCommTCPPeaksStreamer, HCommTCPSpectrumStreamer).  These
+classes enable concurrency for streaming using the python built in asyncio library.  Examples are provided to
+show to implement these.
+
+The AsyncHyperion class implements all functions as coroutines, enabling easy insertion into applications that
+require concurrency for all functions.
 
 """
 import asyncio
@@ -1326,6 +1331,11 @@ class Hyperion(object):
 
 
 class AsyncHyperion(object):
+    """
+    This is a fully asynchronous implementation of the API.  All methods are implemented as async coroutines.
+    Properties are not used as they are in the Hyperion Class, but the functionality is implemented in the methods.
+    This class uses a persistent TCP connection.
+    """
     PowerCal = namedtuple('PowerCal', 'offsets scales inverse_scales')
 
     def __init__(self, address: str, loop=None):
@@ -1346,7 +1356,7 @@ class AsyncHyperion(object):
         """
         Gets the offset and scale to be used to convert the fixed point spectrum data into dBm units.
         :return: The offset and scale for each channel.
-        :rtype: Hyperion.PowerCal
+        :rtype: AsyncHyperion.PowerCal
         """
         if self._power_cal is None:
             cal_info = np.frombuffer((await self._execute_command('#GetPowerCalibrationInfo')).content, dtype=np.int32)
