@@ -61,7 +61,7 @@ STREAM_SENSORS_PORT = 51974
 
 SUCCESS = 0
 
-_LIBRARY_VERSION = '2.0.0.0'
+_LIBRARY_VERSION = '2.0.0.1'
 
 HyperionResponse = namedtuple('HyperionResponse', 'message content')
 HyperionResponse.__doc__ += "A namedtuple object that encapsulates responses returned from a Hyperion Instrument"
@@ -186,7 +186,7 @@ class HCommTCPClient(object):
 
 
     @classmethod
-    def hyperion_command(cls, address, command, argument='', request_options=0):
+    def hyperion_command(cls, address, command, argument='', request_options=0, port = COMMAND_PORT):
         """
         A self contained synchronous wrapper for sending single commands to the hyperion and receiving a response.
 
@@ -198,12 +198,14 @@ class HCommTCPClient(object):
         :type argument: str
         :param request_options: Byte flags that determine the type of data returned by the instrument.
         :type request_options: int
+        :param port: TCP port to connect to.  Defaults to COMMAND_PORT
+        :type port: int
         :return: The response as a HyperionResponse namedTuple
         :rtype: HyperionResponse
         """
         exec_loop = asyncio.get_event_loop()
 
-        h1 = HCommTCPClient(address, COMMAND_PORT, exec_loop)
+        h1 = HCommTCPClient(address, port, exec_loop)
 
         error_report = {'status':False}
 

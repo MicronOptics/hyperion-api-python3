@@ -18,12 +18,11 @@ import sys
 import hyperion
 
 
-h1 = hyperion.Hyperion('10.0.10.71')
+h1 = hyperion.Hyperion('10.0.10.87')
 
 #Get the spectrum
 
 h1.active_full_spectrum_channel_numbers = range(1, h1.channel_count + 1)
-
 fig = plt.figure()
 ax = plt.subplot(111)
 spectra = h1.spectra
