@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fea4cbc6-f5b0-41dc-9865-40d69ff111fd" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/hyperion-api-python3.iml" afterPath="$PROJECT_DIR$/.idea/hyperion-api-python3.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="fea4cbc6-f5b0-41dc-9865-40d69ff111fd" name="Default" comment="Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed to a non-existent property.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/SimpleExamples/getmultiplespectrumplot.py" afterPath="$PROJECT_DIR$/SimpleExamples/getmultiplespectrumplot.py" />
       <change beforePath="$PROJECT_DIR$/hyperion.py" afterPath="$PROJECT_DIR$/hyperion.py" />
-      <change beforePath="$PROJECT_DIR$/hyperion_streaming.py" afterPath="$PROJECT_DIR$/support/hyperion_streaming.py" />
-      <change beforePath="$PROJECT_DIR$/hyperion_streaming_simulator.py" afterPath="$PROJECT_DIR$/support/hyperion_streaming_simulator.py" />
-      <change beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
-      <change beforePath="$PROJECT_DIR$/test_hyperion.py" afterPath="$PROJECT_DIR$/support/test/test_hyperion.py" />
-      <change beforePath="$PROJECT_DIR$/test_hyperion_streaming.py" afterPath="$PROJECT_DIR$/support/test/test_hyperion_streaming.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -54,10 +46,10 @@
       <file leaf-file-name="hyperion.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hyperion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="209" column="39" lean-forward="true" selection-start-line="209" selection-start-column="39" selection-end-line="209" selection-end-column="39" />
+            <state relative-caret-position="277">
+              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="27" selection-end-column="23" />
               <folding>
-                <element signature="e#1992#2006#0" expanded="true" />
+                <element signature="e#2157#2171#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -498,7 +490,21 @@
       <option name="project" value="LOCAL" />
       <updated>1543512721033</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Added port argument for hyperion_command">
+      <created>1562764133791</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1562764133791</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed to a non-existent property.">
+      <created>1562769180297</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1562769180297</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -578,7 +584,9 @@
     <MESSAGE value="Created a new fully async hyperion class." />
     <MESSAGE value="Preparing for distribution.  Added/updated simple examples." />
     <MESSAGE value="Initial version 2.0.0.0 distribution." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial version 2.0.0.0 distribution." />
+    <MESSAGE value="Added port argument for hyperion_command" />
+    <MESSAGE value="Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed to a non-existent property." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed to a non-existent property." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -598,7 +606,7 @@
         <state relative-caret-position="19215">
           <caret line="1281" column="50" lean-forward="false" selection-start-line="1281" selection-start-column="50" selection-end-line="1281" selection-end-column="50" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -625,7 +633,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -689,7 +697,7 @@
         <state relative-caret-position="19440">
           <caret line="1302" column="0" lean-forward="false" selection-start-line="1302" selection-start-column="0" selection-end-line="1302" selection-end-column="0" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -724,7 +732,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="29" lean-forward="true" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -742,7 +750,7 @@
         <state relative-caret-position="2745">
           <caret line="186" column="42" lean-forward="false" selection-start-line="186" selection-start-column="42" selection-end-line="186" selection-end-column="42" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -770,7 +778,7 @@
         <state relative-caret-position="2745">
           <caret line="186" column="42" lean-forward="false" selection-start-line="186" selection-start-column="42" selection-end-line="186" selection-end-column="42" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -808,7 +816,7 @@
         <state relative-caret-position="2355">
           <caret line="159" column="34" lean-forward="true" selection-start-line="159" selection-start-column="34" selection-end-line="159" selection-end-column="34" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -826,7 +834,7 @@
         <state relative-caret-position="1755">
           <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -854,7 +862,7 @@
         <state relative-caret-position="2805">
           <caret line="189" column="0" lean-forward="true" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1003,10 +1011,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="209" column="39" lean-forward="true" selection-start-line="209" selection-start-column="39" selection-end-line="209" selection-end-column="39" />
+        <state relative-caret-position="277">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="27" selection-end-column="23" />
           <folding>
-            <element signature="e#1992#2006#0" expanded="true" />
+            <element signature="e#2157#2171#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -24,8 +24,8 @@
 Module for interfacing to a Hyperion Instrument manufactured by Micron Optics, Inc.
 Version 2.0.1.0
 
-Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed
-to a non-existent property.
+Fixed bugs in AsyncHyperion where invalid properties were being used.  Affected get_spectra, set_static_network_settings,
+and set_network_ip_mode
 
 Version 2.0.0.0
 
@@ -1538,8 +1538,8 @@ class AsyncHyperion(object):
 
     async def set_static_network_settings(self, network_settings: NetworkSettings):
 
-        current_settings = self.static_network_settings
-        ip_mode = self.network_ip_mode
+        current_settings = await self.get_static_network_settings()
+        ip_mode = await self.get_network_ip_mode()
 
         argument = '{0} {1} {2}'.format(network_settings.address,
                                         network_settings.netmask,
@@ -1562,9 +1562,10 @@ class AsyncHyperion(object):
 
         update_ip = False
         if mode in ['Static', 'static', 'STATIC']:
-            if self.network_ip_mode in ['dynamic', 'Dynamic', 'DHCP', 'dhcp']:
+            network_ip_mode = await self.get_network_ip_mode()
+            if network_ip_mode in ['dynamic', 'Dynamic', 'DHCP', 'dhcp']:
                 update_ip = True
-                new_ip = self.static_network_settings.address
+                new_ip = (await self.get_static_network_settings()).address
             command = '#EnableStaticIpMode'
         elif mode in ['dynamic', 'Dynamic', 'DHCP', 'dhcp']:
             command = '#EnableDynamicIpMode'
@@ -1575,6 +1576,7 @@ class AsyncHyperion(object):
 
         if update_ip:
             self._address = new_ip
+            self._comm = HCommTCPClient(self._address, COMMAND_PORT, self._comm.loop)
 
     async def get_instrument_utc_date_time(self):
         """
