@@ -22,6 +22,10 @@
 
 """
 Module for interfacing to a Hyperion Instrument manufactured by Micron Optics, Inc.
+Version 2.0.1.0
+
+Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed
+to a non-existent property.
 
 Version 2.0.0.0
 
@@ -38,6 +42,8 @@ show to implement these.
 
 The AsyncHyperion class implements all functions as coroutines, enabling easy insertion into applications that
 require concurrency for all functions.
+
+
 
 """
 import asyncio
@@ -61,7 +67,7 @@ STREAM_SENSORS_PORT = 51974
 
 SUCCESS = 0
 
-_LIBRARY_VERSION = '2.0.0.1'
+_LIBRARY_VERSION = '2.0.1.0'
 
 HyperionResponse = namedtuple('HyperionResponse', 'message content')
 HyperionResponse.__doc__ += "A namedtuple object that encapsulates responses returned from a Hyperion Instrument"
@@ -1646,8 +1652,8 @@ class AsyncHyperion(object):
         The measured wavlength spectra for all active channels (see hyperion.active_full_spectrum_channel_numbers)
         :type: HACQSpectrumData
         """
-
-        return HACQSpectrumData((await self._execute_command('#GetSpectrum')).content, self.power_cal)
+        power_cal = await self.get_power_cal()
+        return HACQSpectrumData((await self._execute_command('#GetSpectrum')).content, power_cal)
 
     async def reboot(self):
         """
