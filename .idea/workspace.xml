@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fea4cbc6-f5b0-41dc-9865-40d69ff111fd" name="Default" comment="Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed to a non-existent property.">
+    <list default="true" id="fea4cbc6-f5b0-41dc-9865-40d69ff111fd" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/hyperion.py" afterPath="$PROJECT_DIR$/hyperion.py" />
+      <change beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
+      <change beforePath="$PROJECT_DIR$/support/test/test_hyperion.py" afterPath="$PROJECT_DIR$/test/test_hyperion.py" />
+      <change beforePath="$PROJECT_DIR$/support/test/test_hyperion_streaming.py" afterPath="$PROJECT_DIR$/test/test_hyperion_streaming.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -46,11 +49,21 @@
       <file leaf-file-name="hyperion.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hyperion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="27" selection-end-column="23" />
+            <state relative-caret-position="326">
+              <caret line="74" column="27" lean-forward="false" selection-start-line="74" selection-start-column="27" selection-end-line="74" selection-end-column="27" />
               <folding>
-                <element signature="e#2157#2171#0" expanded="true" />
+                <element signature="e#2298#2312#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="getspectrumandpeaksplot.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/SimpleExamples/getspectrumandpeaksplot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="443">
+              <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -58,8 +71,8 @@
       <file leaf-file-name="setup.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="12" column="66" lean-forward="false" selection-start-line="12" selection-start-column="65" selection-end-line="12" selection-end-column="66" />
+            <state relative-caret-position="300">
+              <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding>
                 <element signature="e#23#66#0" expanded="true" />
               </folding>
@@ -88,7 +101,7 @@
         </entry>
       </file>
       <file leaf-file-name="test_hyperion.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+        <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="495">
               <caret line="35" column="63" lean-forward="false" selection-start-line="35" selection-start-column="63" selection-end-line="35" selection-end-column="63" />
@@ -100,9 +113,9 @@
         </entry>
       </file>
       <file leaf-file-name="test_hyperion_streaming.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/support/test/test_hyperion_streaming.py">
+        <entry file="file://$PROJECT_DIR$/test/test_hyperion_streaming.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3225">
+            <state relative-caret-position="578">
               <caret line="223" column="0" lean-forward="false" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -227,6 +240,11 @@
             <path>
               <item name="hyperion-api-python3" type="b2602c69:ProjectViewProjectNode" />
               <item name="hyperion-api-python3" type="462c0819:PsiDirectoryNode" />
+              <item name="SimpleExamples" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hyperion-api-python3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hyperion-api-python3" type="462c0819:PsiDirectoryNode" />
               <item name="support" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -249,14 +267,14 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/support" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/test" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/SimpleExamples" />
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/support" />
+      <recent name="$PROJECT_DIR$/test" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -342,7 +360,7 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/support/test/test_hyperion.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/test/test_hyperion.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
     </configuration>
     <configuration name="py.test in test_hyperion_streaming.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
@@ -358,7 +376,7 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/support/test/test_hyperion_streaming.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/test/test_hyperion_streaming.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
     </configuration>
     <list size="5">
@@ -504,7 +522,14 @@
       <option name="project" value="LOCAL" />
       <updated>1562769180297</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Fixed bugs in AsyncHyperion where invalid properties were being used.  Affected get_spectra, set_static_network_settings,and set_network_ip_mode">
+      <created>1562770097409</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1562770097409</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -586,7 +611,8 @@
     <MESSAGE value="Initial version 2.0.0.0 distribution." />
     <MESSAGE value="Added port argument for hyperion_command" />
     <MESSAGE value="Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed to a non-existent property." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug in AsyncHyperion.get_spectra that prevented the method from working because the power_cal argument pointed to a non-existent property." />
+    <MESSAGE value="Fixed bugs in AsyncHyperion where invalid properties were being used.  Affected get_spectra, set_static_network_settings,and set_network_ip_mode" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs in AsyncHyperion where invalid properties were being used.  Affected get_spectra, set_static_network_settings,and set_network_ip_mode" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -606,12 +632,12 @@
         <state relative-caret-position="19215">
           <caret line="1281" column="50" lean-forward="false" selection-start-line="1281" selection-start-column="50" selection-end-line="1281" selection-end-column="50" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion_streaming.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion_streaming.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="35" column="4" lean-forward="false" selection-start-line="35" selection-start-column="4" selection-end-line="36" selection-end-column="47" />
@@ -633,12 +659,12 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1365">
           <caret line="93" column="11" lean-forward="false" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
@@ -648,7 +674,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion_streaming.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion_streaming.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="35" column="4" lean-forward="false" selection-start-line="35" selection-start-column="4" selection-end-line="36" selection-end-column="47" />
@@ -665,7 +691,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1365">
           <caret line="93" column="11" lean-forward="false" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
@@ -675,7 +701,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion_streaming.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion_streaming.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
@@ -697,7 +723,7 @@
         <state relative-caret-position="19440">
           <caret line="1302" column="0" lean-forward="false" selection-start-line="1302" selection-start-column="0" selection-end-line="1302" selection-end-column="0" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -717,7 +743,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
@@ -732,7 +758,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="29" lean-forward="true" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -750,12 +776,12 @@
         <state relative-caret-position="2745">
           <caret line="186" column="42" lean-forward="false" selection-start-line="186" selection-start-column="42" selection-end-line="186" selection-end-column="42" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="37" lean-forward="true" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
@@ -778,12 +804,12 @@
         <state relative-caret-position="2745">
           <caret line="186" column="42" lean-forward="false" selection-start-line="186" selection-start-column="42" selection-end-line="186" selection-end-column="42" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="37" lean-forward="true" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
@@ -801,7 +827,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" column="4" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="90" />
@@ -816,7 +842,7 @@
         <state relative-caret-position="2355">
           <caret line="159" column="34" lean-forward="true" selection-start-line="159" selection-start-column="34" selection-end-line="159" selection-end-column="34" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -834,12 +860,12 @@
         <state relative-caret-position="1755">
           <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
@@ -862,7 +888,7 @@
         <state relative-caret-position="2805">
           <caret line="189" column="0" lean-forward="true" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -927,13 +953,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SimpleExamples/getspectrumandpeaksplot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="25" lean-forward="false" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SimpleExamples/peak_streaming.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -960,26 +979,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="35" column="63" lean-forward="false" selection-start-line="35" selection-start-column="63" selection-end-line="35" selection-end-column="63" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/support/test/test_hyperion_streaming.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3225">
-          <caret line="223" column="0" lean-forward="false" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/support/hyperion_streaming.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -999,22 +998,50 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MANIFEST" />
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="35" column="63" lean-forward="false" selection-start-line="35" selection-start-column="63" selection-end-line="35" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="66" lean-forward="false" selection-start-line="12" selection-start-column="65" selection-end-line="12" selection-end-column="66" />
+        <state relative-caret-position="300">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
             <element signature="e#23#66#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_hyperion_streaming.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="223" column="0" lean-forward="false" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SimpleExamples/getspectrumandpeaksplot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/hyperion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="27" selection-end-column="23" />
+        <state relative-caret-position="326">
+          <caret line="74" column="27" lean-forward="false" selection-start-line="74" selection-start-column="27" selection-end-line="74" selection-end-column="27" />
           <folding>
-            <element signature="e#2157#2171#0" expanded="true" />
+            <element signature="e#2298#2312#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -22,6 +22,11 @@
 
 """
 Module for interfacing to a Hyperion Instrument manufactured by Micron Optics, Inc.
+
+Version 2.0.2.0
+
+comm interface can now be specified for Hyperion or AsyncHyperion, enabling the use of alternate communication protocols.
+
 Version 2.0.1.0
 
 Fixed bugs in AsyncHyperion where invalid properties were being used.  Affected get_spectra, set_static_network_settings,
@@ -67,7 +72,7 @@ STREAM_SENSORS_PORT = 51974
 
 SUCCESS = 0
 
-_LIBRARY_VERSION = '2.0.1.0'
+_LIBRARY_VERSION = '2.0.2.0'
 
 HyperionResponse = namedtuple('HyperionResponse', 'message content')
 HyperionResponse.__doc__ += "A namedtuple object that encapsulates responses returned from a Hyperion Instrument"
@@ -188,7 +193,12 @@ class HCommTCPClient(object):
 
         return response
 
+    def execute_command_synchronously(self, command, argument='', request_options=0):
 
+        result = self.loop.run_until_complete(self.execute_command(command, argument, request_options))
+        self.writer = None
+        self.reader = None
+        return result
 
 
     @classmethod
@@ -547,6 +557,11 @@ class HACQSpectrumData(object):
 
         return data_db
 
+    def as_dict(self):
+        timestamp = self.header.timestamp_frac * 1e-9 + self.header.timestamp_int
+
+        return { 'timestamp': timestamp, 'header' : self.spectra_header, 'spectra' : self._spectra}
+
     @classmethod
     def data_parser(cls, raw_data, powercal=None):
 
@@ -674,15 +689,19 @@ class Hyperion(object):
 
     PowerCal = namedtuple('PowerCal', 'offsets scales inverse_scales')
 
-    def __init__(self, address: str):
+    def __init__(self, address: str, comm = None, loop = None):
 
         self._address = address
 
         self._power_cal = None
 
+        self._loop = loop or asyncio.get_event_loop()
+
+        self._comm = comm or HCommTCPClient(address, COMMAND_PORT, self._loop)
+
     def _execute_command(self, command: str, argument: str = ''):
 
-        return HCommTCPClient.hyperion_command(self._address, command, argument)
+        return self._comm.execute_command_synchronously(command, argument)
 
     @property
     def power_cal(self):
@@ -1346,7 +1365,7 @@ class AsyncHyperion(object):
     """
     PowerCal = namedtuple('PowerCal', 'offsets scales inverse_scales')
 
-    def __init__(self, address: str, loop=None):
+    def __init__(self, address: str, loop=None, comm = None):
 
         self._address = address
 
@@ -1354,11 +1373,12 @@ class AsyncHyperion(object):
 
         self._loop = loop or asyncio.get_event_loop()
 
-        self._comm = HCommTCPClient(address, COMMAND_PORT, loop)
+        self._comm = comm or HCommTCPClient(address, COMMAND_PORT, loop)
 
     async def _execute_command(self, command: str, argument: str = ''):
 
         return await self._comm.execute_command(command, argument)
+
 
     async def get_power_cal(self):
         """
@@ -1656,6 +1676,10 @@ class AsyncHyperion(object):
         """
         power_cal = await self.get_power_cal()
         return HACQSpectrumData((await self._execute_command('#GetSpectrum')).content, power_cal)
+
+    async def get_spectra_as_dict(self) -> dict():
+
+        return (await self.get_spectra()).as_dict()
 
     async def reboot(self):
         """
