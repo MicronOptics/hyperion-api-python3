@@ -13,6 +13,7 @@ setup(name = 'HyperionAPI',
       description = 'Public API for Hyperion Instruments from Micron Optics, Inc.',
       author = 'Dustin W. Carr',
       author_email = 'dcarr@micronoptics.com',
+      include_package_data = True,
       packages = find_packages(exclude=("*.test","test","test_*","tests",)),
       py_modules=['hyperion']
       )

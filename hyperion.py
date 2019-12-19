@@ -23,6 +23,14 @@
 """
 Module for interfacing to a Hyperion Instrument manufactured by Micron Optics, Inc.
 
+Version 2.0.3.1
+
+Bug fixes in AsyncHyperion, where some commands were missing "await".
+
+Version 2.0.3.0
+
+Implemented hyperion firmware update.
+
 Version 2.0.2.0
 
 comm interface can now be specified for Hyperion or AsyncHyperion, enabling the use of alternate communication protocols.
@@ -59,7 +67,7 @@ import numpy as np
 from datetime import datetime
 from functools import partial
 import logging
-
+import hashlib
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
@@ -72,7 +80,7 @@ STREAM_SENSORS_PORT = 51974
 
 SUCCESS = 0
 
-_LIBRARY_VERSION = '2.0.2.0'
+_LIBRARY_VERSION = '2.0.3.1'
 
 HyperionResponse = namedtuple('HyperionResponse', 'message content')
 HyperionResponse.__doc__ += "A namedtuple object that encapsulates responses returned from a Hyperion Instrument"
@@ -153,8 +161,8 @@ class HCommTCPClient(object):
         if status != SUCCESS:
             self.read_buffer = bytearray()
             loop = asyncio.get_event_loop()
-            loop.call_exception_handler({'message':message.decode()})
-            #raise (HyperionError(message))
+            #loop.call_exception_handler({'message':message.decode()})
+            raise (HyperionError(message))
 
 
         content = await self.read_data(content_length)
@@ -172,7 +180,10 @@ class HCommTCPClient(object):
         header_out = pack('BBHI', request_options, 0, len(command), len(argument))
         self.writer.write(header_out)
         self.writer.write(command.encode(encoding='ascii'))
-        self.writer.write(argument.encode(encoding='ascii'))
+        try:
+            self.writer.write(argument.encode(encoding='ascii'))
+        except AttributeError:
+            self.writer.write(argument)
 
     async def execute_command(self, command, argument='', request_options = 0):
         """Asynchronously writes a formatted command packet to the hyperion instrument and returns the response.
@@ -245,7 +256,13 @@ class HCommTCPStreamer(HCommTCPClient):
     Abstract base class for the different streaming data sources on the Hyperion (peaks, spectra, sensors)
     """
 
-    def __init__(self, address:str, port: int, loop, queue : asyncio.Queue, data_parser = None, fast_streaming = False):
+    def __init__(self,
+                 address:str,
+                 port: int,
+                 loop,
+                 queue : asyncio.Queue = None,
+                 data_parser = None,
+                 fast_streaming = False):
         """
         Set up a new streaming client.
         :param address: The instrument ipV4 address
@@ -345,7 +362,8 @@ class HCommTCPSensorStreamer(HCommTCPStreamer):
     """
 
     def __init__(self, address: str, loop, queue: asyncio.Queue):
-        """Sets up a new streaming client for sensor data from a hyperion instrument
+        """Sets up a new streaming client for sensor data from a hyperion instrument.  Because the number of sensors
+        output is fixed (assuming sensors are not added while streaming), fast_streaming is set to True.
 
         :param str address:  The instrument ipV4 address
         :param loop:  The event loop that will be used for scheduling tasks.
@@ -1166,7 +1184,7 @@ class Hyperion(object):
         :param wavelength_boundaries: An iterable of wavelengths that mark boundaries between regions.  The first region
         is assumed to start at the starting wavelength for the instrument, so each wavelength in this list specifies the
         end of the region over which the respective distance compensation will be applied.
-        :param delays:  The delays to use on each region, in nanoseconds.  If this is not None, then distances is unused
+        :param delays:  The delays to use on each region, in nanoseconds.  If this is None, then distances is unused
         :param distances: An iterable of distances, in meters, to use for the compensation.  Each distance corresponds to the
         respective wavelength region specified by the wavelength_boundaries.  This is the one-way distance through the
         the fiber to the sensor.
@@ -1174,10 +1192,12 @@ class Hyperion(object):
         :return: The resulting peak offset settings in a HPeakOffsets named tuple.
         :rtype: HPeakOffsets
         """
-        count_boundaries = np.asarray(self.convert_wavelengths_to_counts(wavelength_boundaries), dtype=np.int)
+
 
         delays = delays or np.asarray(np.round(2*(np.array(distances, dtype=np.float) *
                                       index_of_refraction/SPEED_OF_LIGHT * 1e9)), dtype=np.int)
+
+        count_boundaries = np.asarray(self.convert_wavelengths_to_counts(wavelength_boundaries, delays), dtype=np.int)
 
         peak_offsets = HPeakOffsets(count_boundaries, delays)
 
@@ -1212,13 +1232,15 @@ class Hyperion(object):
 
         try:
             num_wavelengths = len(wavelengths)
+            scalars = False
         except TypeError:
             wavelengths = [wavelengths]
+            scalars = True
             num_wavelengths = 1
 
         if offsets is None:
             offsets = np.zeros(len(wavelengths), dtype=np.int)
-        elif num_wavelengths == 1:
+        elif scalars:
             offsets  = [offsets]
         counts = []
         for wavelength, offset in zip(wavelengths,offsets):
@@ -1226,7 +1248,7 @@ class Hyperion(object):
             result = self._execute_command('#ConvertWavelengthToCount', arg_string).content
             counts.append(unpack('d', result)[0])
 
-        if num_wavelengths == 1:
+        if scalars:
             return counts[0]
         else:
             return counts
@@ -1248,6 +1270,27 @@ class Hyperion(object):
         except TypeError:
             result = self._execute_command('#ConvertCountToWavelength', str(counts)).content
             return unpack('d', result)
+
+    def update_system(self, firmware_bytes, md5_hash = None):
+        """
+        This updates the system firmware.  After this is complete, the system will need to be restarted for the changes
+        to take effect.  DO NOT REBOOT until this command returns and you see "REBOOT REQUIRED" on the front panel of
+        the instrument.
+        :param firmware_bytes: The contents of the update file.
+        :type firmware_bytes: bytes
+        :param md5_hash:  The md5 hash of the file.  This is provided to check the data integrity of files that have
+        been uploaded remotely to the client that is running this API.  If there is a mismatch between the hash provided
+        and the calculated hash, then a HyperionError is raised.
+        :return: Returned message from the instrument.
+        :rtype: str
+        """
+        if md5_hash:
+            hash_check = hashlib.md5()
+            hash_check.update(firmware_bytes)
+            if hash_check.hexdigest() != md5_hash:
+                raise HyperionError('File integrity error.  Hashes do not match')
+
+        return (self._execute_command('#updateSystem', firmware_bytes)).message
 
     # ******************************************************************************
     # Sensors API
@@ -1808,14 +1851,16 @@ class AsyncHyperion(object):
         :return: The resulting peak offset settings in a HPeakOffsets named tuple.
         :rtype: HPeakOffsets
         """
-        count_boundaries = np.asarray(self.convert_wavelengths_to_counts(wavelength_boundaries), dtype=np.int)
 
         delays = delays or np.asarray(np.round(2 * (np.array(distances, dtype=np.float) *
                                                     index_of_refraction / SPEED_OF_LIGHT * 1e9)), dtype=np.int)
 
+        count_boundaries = np.asarray(await self.convert_wavelengths_to_counts(wavelength_boundaries, delays), dtype=np.int)
+
+
         peak_offsets = HPeakOffsets(count_boundaries, delays)
 
-        self.set_peak_offsets_in_counts(channel, peak_offsets)
+        await self.set_peak_offsets_in_counts(channel, peak_offsets)
 
         return peak_offsets
 
@@ -1844,21 +1889,23 @@ class AsyncHyperion(object):
 
         try:
             num_wavelengths = len(wavelengths)
+            scalars = False
         except TypeError:
             wavelengths = [wavelengths]
+            scalars = True
             num_wavelengths = 1
 
         if offsets is None:
             offsets = np.zeros(len(wavelengths), dtype=np.int)
-        elif num_wavelengths == 1:
-            offsets = [offsets]
+        elif scalars:
+            offsets  = [offsets]
         counts = []
-        for wavelength, offset in zip(wavelengths, offsets):
+        for wavelength, offset in zip(wavelengths,offsets):
             arg_string = '{0} {1}'.format(wavelength, offset)
             result = (await self._execute_command('#ConvertWavelengthToCount', arg_string)).content
             counts.append(unpack('d', result)[0])
 
-        if num_wavelengths == 1:
+        if scalars:
             return counts[0]
         else:
             return counts
@@ -1880,6 +1927,19 @@ class AsyncHyperion(object):
         except TypeError:
             result = (await self._execute_command('#ConvertCountToWavelength', str(counts))).content
             return unpack('d', result)
+
+    async def update_system(self, firmware_bytes):
+        """
+        This updates the system firmware.  After this is complete, the system will need to be restarted for the changes
+        to take effect.  DO NOT REBOOT until this command returns and you see "REBOOT REQUIRED" on the front panel of
+        the instrument.
+        :param firmware_bytes: The contents of the update file.
+        :type firmware_bytes: bytes
+        :return:
+        :rtype:
+        """
+
+        return (await self._execute_command('#updateSystem', firmware_bytes)).message
 
     # ******************************************************************************
     # Sensors API
