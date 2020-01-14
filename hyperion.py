@@ -97,6 +97,7 @@ NetworkSettings = namedtuple('NetworkSettings', 'address netmask gateway')
 
 SPEED_OF_LIGHT = 2.9979e8
 
+
 class HCommTCPClient(object):
     """A class that implements the hyperion communication protocol over TCP, using asynchronous IO
 
@@ -207,8 +208,8 @@ class HCommTCPClient(object):
     def execute_command_synchronously(self, command, argument='', request_options=0):
 
         result = self.loop.run_until_complete(self.execute_command(command, argument, request_options))
-        self.writer = None
-        self.reader = None
+        #self.writer = None
+        #self.reader = None
         return result
 
 
@@ -323,6 +324,7 @@ class HCommTCPStreamer(HCommTCPClient):
         :return: None
         """
 
+        logger.debug('Trying to connect . . .')
         await self.connect()
         logger.debug('Stream connected')
         self.stream_active = True
@@ -340,8 +342,10 @@ class HCommTCPStreamer(HCommTCPClient):
         logger.info("Sending end of stream.")
         logger.debug("Stream counter: {0}".format(self._stream_counter))
 
+        logger.info('Stream putting last data into queue . . .')
         await self.data_queue.put({'data':None})
 
+        logger.info('Stream waiting for queue to empty . . .')
         await self.data_queue.join()
 
         self.writer.close()
@@ -786,6 +790,27 @@ class Hyperion(object):
         """
 
         return self._execute_command('#GetInstrumentName').content.decode()
+
+    @property
+    def ssh_public_key_names(self):
+        """
+        The public key names on the instrument.
+        :type: list
+        """
+        names = self._execute_command('#GetSshPublicKeyNames').content.decode().split('\r\n')
+
+        if len(names) == 1 and len(names[0]) == 0:
+            return list()
+        else:
+            return names
+
+    def add_ssh_public_key(self, name, key):
+
+        return self._execute_command('#AddSshPublicKey', '{0} {1}'.format(name, key))
+
+    def remove_ssh_public_key(self, name):
+
+        return self._execute_command('#RemoveSshPublicKey', name)
 
     @instrument_name.setter
     def instrument_name(self, name: str):
