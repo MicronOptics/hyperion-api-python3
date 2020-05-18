@@ -19,8 +19,8 @@ import hyperion
 
 
 channel = 1
-h1 = hyperion.Hyperion('10.0.10.71')
-
+h1 = hyperion.Hyperion('10.0.10.70')
+h1.active_full_spectrum_channel_numbers = range(1, h1.channel_count + 1)
 
 peaks = h1.peaks[channel]
 spectra = h1.spectra

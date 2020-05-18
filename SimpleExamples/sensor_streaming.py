@@ -16,11 +16,11 @@ hyp_inst.remove_sensors()
 
 test_sensors = [
     # edit this to define your own sensors
-    #     Name        Model   chan. wl     cal
-        ['sensor_1', 'os7520', 1, 1590.0, 2300.0],
-        ['sensor_2', 'os7520', 1, 1610.0, 2300.0],
-        ['sensor_3', 'os7510', 2, 1550.0, 66.0],
-        ['sensor_4', 'os7510', 2, 1570.0, 66.0]
+    #     Name        Model   chan. wl     cal  fixed_orientation
+        ['sensor_1', 'os7520', 1, 1510.0, 11.0, False],
+        ['sensor_2', 'os7520', 2, 1530.0, 12.0, True],
+        ['sensor_3', 'os7510', 3, 1550.0, 13.0, False],
+        ['sensor_4', 'os7510', 4, 1570.0, 14.0, True]
     ]
 
 

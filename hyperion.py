@@ -431,12 +431,12 @@ class HACQSensorData(object):
     """
     SensorHeader = namedtuple('SensorHeader',
                               ['header_length',
-                                'status',
-                                'buffer_percentage',
-                                'reserved',
-                                'serial_number',
-                                'timestamp_int',
-                                'timestamp_frac'])
+                               'buffer_available',
+                               'reserved1',
+                               'reserved2',
+                               'serial_number',
+                               'timestamp_int',
+                               'timestamp_frac'])
 
     def __init__(self, streaming_data):
         header_length = 24
@@ -463,6 +463,7 @@ class HACQPeaksData(object):
 
     PeaksHeader = namedtuple('PeaksHeader',
                              ['length',
+                              'buffer_available',
                                'version',
                                'reserved',
                                'serial_number',
@@ -473,7 +474,7 @@ class HACQPeaksData(object):
 
         header_length = 24
 
-        self.header = HACQPeaksData.PeaksHeader(*unpack('HHIQII', raw_data[:header_length]))
+        self.header = HACQPeaksData.PeaksHeader(*unpack('HBBIQII', raw_data[:header_length]))
 
         self.serial_number = self.header.serial_number
         # header.length is the total length including the peak counts array
@@ -1321,18 +1322,19 @@ class Hyperion(object):
     # Sensors API
     # ******************************************************************************
 
-    def add_sensor(self, name, model, channel, wavelength, calibration_factor, distance=0):
+    def add_sensor(self, name, model, channel, wavelength, calibration_factor, fixed_orientation=False):
         """Add a sensor to the hyperion instrument.  Added sensors will stream data over the sensor streaming port.
         :param name: Sensor name.  This is an arbitrary string provided by user.
         :param model: Sensor model.  This must match the specific model, currently either os7510 or os7520.
         :param channel: Instrument channel on which the sensor is present.  First channel is 1.
         :param wavelength: The wavelength band of the sensor.
         :param calibration_factor: The calibration constant for the sensor.
-        :param distance: Fiber length from sensor to interrogator, in meters, integer.
+        :param fixed_orientation: Controls the auto saturation alogrithm.  If true, the sensor can re-center if it
+        experiences a high shock.
         :return: None
         """
-        argument = '{0} {1} {2} {3} {4} {5}'.format(name, model, channel, distance, wavelength,
-                                                    calibration_factor)
+        argument = '{0} {1} {2} {3} {4} {5} {6}'.format(name, model, channel, 0, wavelength,
+                                                        calibration_factor, fixed_orientation)
         self._execute_command("#AddSensor", argument)
 
     def get_sensor_names(self):
@@ -1359,41 +1361,60 @@ class Hyperion(object):
 
         for sensor_num in range(num_sensors):
             sensor_config = dict()
-            sensor_config['version'], = unpack('H', sensor_export[:2])
+
+            # Version is a u16, 2 bytes, H
+            sensor_config['sensor_version'], = unpack('H', sensor_export[:2])
             sensor_export = sensor_export[2:]
 
+            # ID is a 128 bits (16 bytes)
             sensor_config['id'] = list(bytearray(sensor_export[:16]))
             sensor_export = sensor_export[16:]
 
+            # Name length is a u16, 2 bytes, H
             name_length, = unpack('H', sensor_export[:2])
-
             sensor_export = sensor_export[2:]
+
+            # Name is a string with name length bytes
             sensor_config['name'] = sensor_export[:name_length].decode()
             sensor_export = sensor_export[name_length:]
 
+            # Model length is a u16, 2 bytes, H
             model_length, = unpack('H', sensor_export[:2])
             sensor_export = sensor_export[2:]
+
+            # Model name is a string with name length bytes
             sensor_config['model'] = sensor_export[:model_length].decode()
             sensor_export = sensor_export[model_length:]
 
+            # Channel is a u16 (0 based), 2 bytes, H
             sensor_config['channel'], = unpack('H', sensor_export[:2])
             sensor_config['channel'] += 1
             sensor_export = sensor_export[2:]
 
-            sensor_config['distance'], = unpack('d', sensor_export[:8])
+            # Note used is a double, 8 bytes, d
+            distance_not_used, = unpack('d', sensor_export[:8])
+            sensor_export = sensor_export[8:]
 
-            # drop 2 bytes for reserved field
-            sensor_export = sensor_export[10:]
+            # Sensor definition version
+            fp_sensor_version, = unpack('H', sensor_export[:2])
+            sensor_config['fp_sensor_version'] = fp_sensor_version
+            sensor_export = sensor_export[2:]
 
-            detail_keys = ('wavelength',
-                           'calibration_factor',
-                           'rc_gain',
-                           'rc_thresholdHigh',
-                           'rc_thresholdLow')
+            # Wavelength band is a double, 8 bytes, d
+            wavelength_band, = unpack('d', sensor_export[:8])
+            sensor_config['wavelength'] = wavelength_band
+            sensor_export = sensor_export[8:]
 
-            sensor_details = dict(zip(detail_keys, unpack('ddddd', sensor_export[:40])))
-            sensor_export = sensor_export[40:]
-            sensor_config.update(sensor_details)
+            # Calibration factor is a double, 8 bytes, d
+            calibration_factor, = unpack('d', sensor_export[:8])
+            sensor_config['calibration_factor'] = calibration_factor
+            sensor_export = sensor_export[8:]
+
+            # Fixed orientation is a u8, 1 byte, B
+            fixed_orientation, = unpack('B', sensor_export[:1])
+            sensor_config['fixed_orientation'] = fixed_orientation != 0
+            sensor_export = sensor_export[1:]
+
             sensor_configs.append(sensor_config)
         return sensor_configs
 
